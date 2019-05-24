@@ -58,3 +58,26 @@
 ; (print (sqrt (+ 100 37)))
 ; (print (sqrt (+ (sqrt 2) (sqrt 3))))
 ; (print (square (sqrt 1000)))
+
+; 1.2.1 線形再帰と反復
+
+; (線形)再帰的プロセス
+(define (factorial n)
+  (if (= n 1)
+      1
+      (* n (factorial (- n 1)))))
+
+; (print (factorial 6))
+
+; (線形)反復的プロセス
+(define (factorial n)
+  (fact-iter 1 1 n))
+
+(define (fact-iter product counter max-count)
+  (if (> counter max-count)
+      product
+      (fact-iter (* counter product)
+                 (+ counter 1)
+                 max-count)))
+
+; (print (factorial 6))
