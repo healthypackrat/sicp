@@ -159,3 +159,13 @@
   (= (remainder n 2) 0))
 
 ; (print (expt 2 8))
+
+; 1.2.5 最大公約数
+
+(define (gcd a b)
+  (if (= b 0)
+      a
+      (gcd b (remainder a b))))
+
+; (print (gcd 16 28))
+; (print (gcd 206 40))
