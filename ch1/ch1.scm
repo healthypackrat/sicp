@@ -215,3 +215,69 @@
 
 ; (print (prime? 561)) ; 561は素数ではない
 ; (print (fast-prime? 561 1)) ; しかし素数として判定される
+
+; 1.3 高階手続きによる抽象
+
+(define (cube x) (* x x x))
+
+; 1.3.1 引数としての手続き
+
+(define (sum-integers a b)
+  (if (> a b)
+      0
+      (+ a (sum-integers (+ a 1) b))))
+
+; (print (sum-integers 1 10))
+
+(define (sum-cubes a b)
+  (if (> a b)
+      0
+      (+ (cube a) (sum-cubes (+ a 1) b))))
+
+; (print (sum-cubes 1 10))
+
+(define (pi-sum a b)
+  (if (> a b)
+      0
+      (+ (/ 1.0 (* a (+ a 2))) (pi-sum (+ a 4) b))))
+
+; (print (* 8 (pi-sum 1 1000)))
+
+(define (sum term a next b)
+  (if (> a b)
+      0
+      (+ (term a)
+         (sum term (next a) next b))))
+
+(define (inc n) (+ n 1))
+
+(define (sum-cubes a b)
+  (sum cube a inc b))
+
+; (print (sum-cubes 1 10))
+
+(define (indentity x) x)
+
+(define (sum-integers a b)
+  (sum identity a inc b))
+
+; (print (sum-integers 1 10))
+
+(define (pi-sum a b)
+  (define (pi-term x)
+    (/ 1.0 (* x (+ x 2))))
+  (define (pi-next x)
+    (+ x 4))
+  (sum pi-term a pi-next b))
+
+; (print (* 8 (pi-sum 1 1000)))
+
+(define (integral f a b dx)
+  (define (add-dx x) (+ x dx))
+  (* (sum f (+ a (/ dx 2.0)) add-dx b) ; 微小区間ごとの長方形の高さの和
+     dx ; 長方形の幅
+     ))
+
+(print (integral cube 0 1 0.01))
+
+(print (integral cube 0 1 0.001))
