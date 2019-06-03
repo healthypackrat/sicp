@@ -59,6 +59,8 @@
 
 ; 2.2.1 並びの表現
 
+; リスト演算
+
 (define (list-ref items n)
   (if (= n 0)
       (car items)
@@ -99,3 +101,33 @@
 
 ; (print (append odds squares))
 ; (1 3 5 7 1 4 9 16 25)
+
+; リストの写像
+
+(define (scale-list items factor)
+  (if (null? items)
+      '()
+      (cons (* (car items) factor)
+            (scale-list (cdr items) factor))))
+
+; (print (scale-list (list 1 2 3 4 5) 10))
+; (10 20 30 40 50)
+
+(define (map proc items)
+  (if (null? items)
+      '()
+      (cons (proc (car items))
+            (map proc (cdr items)))))
+
+; (print (map abs (list -10 2.5 -11.6 17)))
+; (10 2.5 11.6 17)
+
+; (print (map (lambda (x) (* x x)) (list 1 2 3 4)))
+; (1 4 9 16)
+
+(define (scale-list items factor)
+  (map (lambda (x) (* x factor))
+       items))
+
+; (print (scale-list (list 1 2 3 4 5) 10))
+; (10 20 30 40 50)
