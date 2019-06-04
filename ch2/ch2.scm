@@ -182,3 +182,94 @@
 ; (print (scale-tree (list 1 (list 2 (list 3 4) 5) (list 6 7))
 ;                    10))
 ; (10 (20 (30 40) 50) (60 70))
+
+; 2.2.3 公認インターフェースとしての並び
+
+; 並びの演算
+
+(define (filter predicate sequence)
+  (cond ((null? sequence) '())
+        ((predicate (car sequence))
+         (cons (car sequence)
+               (filter predicate (cdr sequence))))
+        (else (filter predicate (cdr sequence)))))
+
+; (print (filter odd? (list 1 2 3 4 5)))
+; (1 3 5)
+
+(define (accumulate op initial sequence)
+  (if (null? sequence)
+      initial
+      (op (car sequence)
+          (accumulate op initial (cdr sequence)))))
+
+; (print (accumulate + 0 (list 1 2 3 4 5)))
+; 15
+
+; (print (accumulate * 1 (list 1 2 3 4 5)))
+; 120
+
+; (print (accumulate cons '() (list 1 2 3 4 5)))
+; (1 2 3 4 5)
+
+(define (enumerate-interval low high)
+  (if (> low high)
+      '()
+      (cons low (enumerate-interval (+ low 1) high))))
+
+; (print (enumerate-interval 2 7))
+; (2 3 4 5 6 7)
+
+(define (enumerate-tree tree)
+  (cond ((null? tree) '())
+        ((not (pair? tree)) (list tree))
+        (else (append (enumerate-tree (car tree))
+                      (enumerate-tree (cdr tree))))))
+
+; (print (enumerate-tree (list 1 (list 2 (list 3 4)) 5)))
+; (1 2 3 4 5)
+
+(define (sum-odd-squares tree)
+  (accumulate +
+              0
+              (map square
+                   (filter odd?
+                           (enumerate-tree tree)))))
+
+; (print (sum-odd-squares (list 1 2 3 4 5)))
+; 35
+
+(define (even-fibs n)
+  (accumulate cons
+              '()
+              (filter even?
+                      (map fib
+                           (enumerate-interval 0 n)))))
+
+(define (fib n)
+  (cond ((= n 0) 0)
+        ((= n 1) 1)
+        (else (+ (fib (- n 1))
+                 (fib (- n 2))))))
+
+; (print (even-fibs 7))
+; (0 2 8)
+
+(define (list-fib-squares n)
+  (accumulate cons
+              '()
+              (map square
+                   (map fib
+                        (enumerate-interval 0 n)))))
+
+; (print (list-fib-squares 10))
+; (0 1 1 4 9 25 64 169 441 1156 3025)
+
+(define (product-of-squares-of-odd-elements sequence)
+  (accumulate *
+              1
+              (map square
+                   (filter odd? sequence))))
+
+; (print (product-of-squares-of-odd-elements (list 1 2 3 4 5)))
+; 225
