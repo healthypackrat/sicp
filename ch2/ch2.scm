@@ -338,3 +338,16 @@
 
 ; (print (permutations '(1 2 3)))
 ; ((1 2 3) (1 3 2) (2 1 3) (2 3 1) (3 1 2) (3 2 1))
+
+; 2.3.1 クォート
+
+(define (my-memq item x)
+  (cond ((null? x) #f)
+        ((eq? item (car x)) x)
+        (else (my-memq item (cdr x)))))
+
+; (print (my-memq 'apple '(pear banana prune)))
+; #f
+
+; (print (my-memq 'apple '(x (apple sauce) y apple pear)))
+; (apple pear)
